@@ -1,0 +1,14 @@
+services:
+  sodalocal:
+    build: .
+    ports:
+      - "${SODA_BIND:-127.0.0.1}:8000:8000"
+    volumes:
+      - soda-data:/data
+    environment:
+      SODA_DATABASE: /data/soda.sqlite3
+    restart: unless-stopped
+volumes:
+  soda-data:
+
+

@@ -1,0 +1,17 @@
+.git
+.venv
+data
+frontend/node_modules
+frontend/dist
+frontend/test-results
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+docs/screenshots
+
+.env*
+*.sqlite*
+*.db
+*.pem
+*.key
+secrets/

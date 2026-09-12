@@ -1,0 +1,27 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.py[cod]
+*.egg-info/
+node_modules/
+frontend/dist/
+data/
+.env
+coverage.xml
+htmlcov/
+
+frontend/test-results/
+frontend/playwright-report/
+frontend/tsconfig.tsbuildinfo
+# Private application data and local credentials
+.env*
+!.env.example
+*.sqlite*
+*.db
+*.db-wal
+*.db-shm
+*.pem
+*.key
+secrets/
+*.log
