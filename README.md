@@ -1,4 +1,4 @@
-# SodaLocal
+# Next-Meal
 
 **Pedidos, caja y cocina para sodas, restaurantes y negocios de comida rápida en Costa Rica.**
 
