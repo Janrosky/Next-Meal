@@ -1,10 +1,12 @@
 import asyncio
 import csv
 import io
+import re
 from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Request, Response, WebSocket, WebSocketDisconnect
+from fastapi.responses import FileResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from starlette.concurrency import run_in_threadpool
 
@@ -12,7 +14,9 @@ from app.domain import BusinessError, Principal, Role
 from app.schemas import (
     BusinessInput,
     CancelInput,
+    CashMovementInput,
     CategoryInput,
+    FiscalInput,
     LoginInput,
     OrderInput,
     PaymentInput,
@@ -24,6 +28,7 @@ from app.schemas import (
     UserUpdate,
 )
 from app.services.business import COSTA_RICA
+from app.services.media import MAX_UPLOAD, image_path, save_image
 
 router = APIRouter(prefix="/api")
 bearer = HTTPBearer(auto_error=False)
@@ -177,6 +182,39 @@ def update_business(data: BusinessInput, request: Request, actor: Admin):
     return changed(request, request.app.state.business.save_settings(data, actor))
 
 
+@router.get("/admin/fiscal")
+def fiscal(request: Request, actor: Admin):
+    return request.app.state.business.fiscal()
+
+
+@router.put("/admin/fiscal")
+def save_fiscal(data: FiscalInput, request: Request, actor: Admin):
+    return changed(request, request.app.state.business.save_fiscal(data, actor))
+
+
+@router.post("/staff/shifts/{shift_id}/movements", status_code=201)
+def cash_movement(shift_id: int, data: CashMovementInput, request: Request, actor: Cashier):
+    return changed(request, request.app.state.business.cash_movement(shift_id, data, actor))
+
+
+@router.post("/admin/media", status_code=201)
+async def upload_image(request: Request, actor: Admin):
+    content = bytearray()
+    async for chunk in request.stream():
+        content.extend(chunk)
+        if len(content) > MAX_UPLOAD:
+            raise BusinessError("La imagen supera el límite de 5 MB.", 413)
+    return await run_in_threadpool(save_image, request.app.state.database, bytes(content))
+
+
+@router.get("/media/{name}")
+def media(name: str, request: Request):
+    target = image_path(request.app.state.database, name)
+    if not target.is_file():
+        raise BusinessError("Imagen no encontrada.", 404)
+    return FileResponse(target, media_type="image/webp")
+
+
 @router.get("/admin/report")
 def report(request: Request, actor: Admin, day: str = Query(default="")):
     try:
@@ -219,10 +257,30 @@ def audit(request: Request, actor: Admin):
 
 @router.post("/admin/backup")
 def backup(request: Request, actor: Admin):
-    name = "soda-" + datetime.now(COSTA_RICA).strftime("%Y%m%d-%H%M%S-%f") + ".sqlite3"
+    name = "soda-" + datetime.now(COSTA_RICA).strftime("%Y%m%d-%H%M%S-%f") + ".zip"
     target = request.app.state.database.path.parent / "backups" / name
-    request.app.state.database.backup(target)
+    request.app.state.database.backup_bundle(target)
     return {"filename": name, "message": "Respaldo guardado en data/backups del servidor."}
+
+
+@router.get("/admin/backups")
+def backups(request: Request, actor: Admin):
+    folder = request.app.state.database.path.parent / "backups"
+    return [
+        {"filename": p.name, "size": p.stat().st_size, "created_at": int(p.stat().st_mtime)}
+        for p in sorted(folder.glob("*"), key=lambda f: f.stat().st_mtime, reverse=True)[:50]
+        if p.is_file() and p.suffix in (".zip", ".sqlite3")
+    ]
+
+
+@router.get("/admin/backups/{name}")
+def download_backup(name: str, request: Request, actor: Admin):
+    if not re.fullmatch(r"[a-zA-Z0-9-]+\.(zip|sqlite3)", name):
+        raise BusinessError("Respaldo no encontrado.", 404)
+    target = request.app.state.database.path.parent / "backups" / name
+    if not target.is_file():
+        raise BusinessError("Respaldo no encontrado.", 404)
+    return FileResponse(target, filename=name, media_type="application/octet-stream")
 
 
 @router.websocket("/events")

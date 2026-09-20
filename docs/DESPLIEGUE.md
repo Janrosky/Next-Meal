@@ -22,6 +22,13 @@ La carpeta de datos debe ser local a la máquina servidor. Para clientes conecta
 
 ## Respaldos y restauración
 
+La interfaz ahora crea y descarga ZIP con `soda.sqlite3`, `media/` y `RESTORE.txt`.
+Los respaldos automáticos también usan este formato. Detener el servidor y extraer en una
+carpeta nueva; mantener las imágenes junto a la base. No publicar la carpeta de respaldos.
+La migración inicial 1 → 2 conserva un respaldo SQLite previo a la actualización.
+El comando CLI `backup` y los pasos siguientes siguen siendo válidos para respaldos de solo base;
+en ese caso copiar también la carpeta `media` para no perder fotografías y logos.
+
 1. Crear un respaldo consistente desde la app o con `python -m app.cli backup`.
 2. Copiarlo fuera del disco del servidor.
 3. Para restaurar, detener todas las instancias de SodaLocal.
@@ -92,5 +99,4 @@ No se ha validado ninguna combinación concreta de plataforma o volumen cloud. S
 - Hay 120 intentos de creación de pedido cada cinco minutos por IP. Los reintentos cuentan.
 - El inicio de sesión limita a 10 intentos cada cinco minutos por IP.
 - Si un proxy agrupa clientes en una IP, revisar límites y configuración de IP real sin confiar en encabezados enviados por clientes arbitrarios.
-
 

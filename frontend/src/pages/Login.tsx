@@ -17,9 +17,8 @@ export default function Login({ onLogin }: { onLogin: (user: User) => void }) {
         setSessionToken(result.token); onLogin(result.user);
       }); }}>
         <label>Usuario<input autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} required maxLength={40} autoFocus /></label>
-        <label>Contraseña<input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required maxLength={128} /></label>
+        <label>Contraseña<input type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required /></label>
         <Notice error={action.error} /><button className="primary wide" disabled={action.busy}>{action.busy ? 'Ingresando…' : 'Ingresar'}<ArrowRight size={18} /></button>
       </form><p className="muted small">Tu administrador crea y administra las cuentas del equipo.</p>
     </main></div>;
 }
-

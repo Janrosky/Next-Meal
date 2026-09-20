@@ -48,15 +48,20 @@ Por eso esta versión requiere un proceso de servidor. Múltiples procesos neces
 
 Hay un turno compartido por local. Todos los pagos requieren una caja abierta y registran el cajero.
 
-Efectivo esperado = fondo inicial + ventas cobradas en efectivo.
+Efectivo esperado = fondo inicial + ventas cobradas en efectivo + entradas − retiros − gastos.
 
 El vuelto no aumenta ventas ni efectivo esperado. Tarjeta y SINPE se reportan aparte. El cierre registra contado, esperado, diferencia, empleado y observaciones.
 
-No se deben registrar retiros ni gastos como si fueran ventas negativas: ese módulo queda pendiente.
+Los movimientos se guardan en cash_movements, requieren una caja abierta, motivo y clave
+idempotente, y no alteran los reportes de ventas. Se impide retirar más que el saldo esperado.
 
 ## Persistencia y evolución
 
-El esquema inicial usa `PRAGMA user_version = 1`. Se rechazan versiones desconocidas. No hay migrador incremental todavía: antes de cambiar el esquema de una instalación con datos deben incorporarse migraciones y respaldos verificados.
+El esquema usa `PRAGMA user_version = 2`. Se rechazan versiones desconocidas. La migración
+1 → 2 crea un respaldo previo y agrega columnas en una transacción, conservando los datos.
+Las fotografías se almacenan como archivos WebP inmutables junto a SQLite. Los respaldos ZIP
+diarios y manuales incluyen ambos; la copia por CLI de SQLite conserva su alcance original.
+Los datos fiscales se guardan aparte del perfil público y solo son accesibles para administradores.
 
 SQLAlchemy facilita una futura migración a PostgreSQL, pero no la convierte en un cambio automático de URL: Database usa pragmas, transacciones y respaldo específicos de SQLite.
 
@@ -65,4 +70,3 @@ SQLAlchemy facilita una futura migración a PostgreSQL, pero no la convierte en 
 La unidad de instalación es un negocio. La versión inicial no es un SaaS multiempresa. El despliegue local y el remoto comparten código, pero no sincronizan datos.
 
 Un producto con sucursales, varias réplicas o modo híbrido requiere decisiones adicionales: identidad del negocio, separación de datos, resolución de conflictos y persistencia de eventos.
-

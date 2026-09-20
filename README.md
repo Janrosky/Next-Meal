@@ -1,5 +1,36 @@
 # Next-Meal
 
+### Actualización local: personalización y operación
+
+La app continúa funcionando con **SQLite en esta computadora**, sin servicios externos para
+pedidos, caja, cocina, fotos o personalización. Ejecutá `Instalar.cmd` al actualizar para instalar
+Pillow y compilar la interfaz; luego iniciá con `Iniciar.cmd`.
+
+- **Mi negocio:** logo, portada, cinco colores libres (selector y HEX), sugerencias de paleta,
+  vista previa, título, horario informativo, mensaje del recibo y pausa de nuevos pedidos.
+- **Productos:** fotos JPG/PNG/WebP, destacados, orden, alérgenos y CABYS opcional.
+- **Caja:** entradas, retiros y gastos de efectivo con motivo, auditoría y prevención de duplicados.
+- **Recibos:** impresión desde pedido, caja e historial mediante el navegador; no son comprobantes fiscales.
+- **Respaldos:** ZIP diario y manual con base de datos e imágenes; descarga autenticada desde Mi negocio.
+- **Migración:** actualización automática del esquema 1 al 2 con respaldo previo de la base existente.
+- **Datos fiscales:** perfil privado del administrador guardado localmente. No firma ni envía documentos a Hacienda.
+
+Las imágenes se convierten a WebP, se limitan a 5 MB / 20 megapíxeles de entrada y 1600 píxeles
+de lado, y se guardan en `media` junto a la base. No requieren una cuenta de almacenamiento.
+Reemplazar o quitar una foto cambia su referencia; los archivos anteriores se conservan.
+El horario es informativo: el administrador controla la pausa de pedidos manualmente.
+Los colores elegidos se aplican al kiosco, acceso de empleados y panel; los estados de error,
+éxito y cocina conservan sus colores semánticos. Se avisa si el texto tiene poco contraste.
+
+Para restaurar un ZIP: detener el servidor, extraerlo en una carpeta nueva, conservar `media`
+junto a `soda.sqlite3` y apuntar `SODA_DATABASE` a esa base. Conservar los datos anteriores
+hasta verificar la restauración. Los respaldos SQLite antiguos y los de migración no contienen imágenes.
+
+**Pendiente:** cobro automático por pasarela, emisión electrónica a Hacienda, devoluciones,
+pagos divididos, modificadores, inventario y plataforma SaaS multiempresa.
+Tarjetas y SINPE continúan verificándose manualmente. La impresión se ha probado como vista
+del navegador; la compatibilidad con una impresora térmica concreta depende de su controlador.
+
 **Pedidos, caja y cocina para sodas, restaurantes y negocios de comida rápida en Costa Rica.**
 
 SodaLocal permite que el cliente arme su pedido en una pantalla de autoservicio, pague en caja y reciba su comida mediante un flujo coordinado con cocina. El administrador gestiona el menú, los empleados y las ventas desde la misma aplicación.
@@ -123,7 +154,7 @@ También podés hacer doble clic en **Instalar.cmd**. Crea un entorno de Python 
 La primera vez solicita:
 
 1. Nombre del usuario administrador.
-2. Contraseña de al menos 10 caracteres.
+2. Contraseña libre: cualquier carácter, sin reglas de composición ni longitud mínima; no puede estar vacía.
 3. Confirmación de la contraseña.
 
 No existen cuentas de producción ni contraseñas predeterminadas. Al escribir la contraseña en la consola, los caracteres no se muestran.
@@ -334,19 +365,40 @@ Esta versión registra ventas y su operación; aún no incluye:
 
 - Facturación electrónica ni integración con Hacienda.
 - Cobro automático con tarjetas o validación bancaria de SINPE.
-- Devoluciones, pagos divididos, retiros de caja y gastos.
+- Devoluciones y pagos divididos.
 - Combos, modificadores cobrables, descuentos o cupones.
 - Inventario de ingredientes, recetas y proveedores.
-- Carga de fotografías e impresión de tickets térmicos.
+- Integración directa con impresoras térmicas (se dispone de impresión por navegador).
 - Varias sucursales o varios negocios dentro de una misma instalación.
 - Operación híbrida con sincronización entre servidor local y nube.
 - Instalador firmado, servicio de Windows o actualizaciones automáticas.
-- Migraciones incrementales para futuras versiones del esquema.
+- Migraciones de futuras versiones, además de la migración 1 → 2 incluida.
 
 Tarjeta y SINPE se confirman manualmente en caja. Los precios del catálogo son precios finales; no existe desglose fiscal en esta versión.
 
 ## Licencia
 
+### Fotografías y temas del menú de ejemplo
+
+La instalación con `init --demo` incluye ocho productos con fotografías locales en seis
+categorías: Favoritos, Desayunos, Bebidas, Cafetería, Acompañamientos y Postres.
+No requiere internet para mostrar fotos. En **Mi negocio** hay doce paletas sugeridas;
+cada una permite editar libremente sus cinco colores.
+
+Para actualizar una instalación de prueba existente:
+
+```powershell
+.\.venv\Scripts\python.exe -m app.cli demo-refresh
+```
+
+Este comando reemplaza fotos, precios, descripciones y categorías de los productos demo
+identificados por nombre; conserva sus IDs y ventas y no elimina otros productos.
+No se ejecuta automáticamente al arrancar. `demo-images` solo completa fotos faltantes
+en productos de ejemplo sin modificar. Las fotos se pueden sustituir desde Productos.
+
+Los autores, fuentes y licencias están en
+[Créditos de fotografías](frontend/public/demo-photo-credits.html), también accesibles
+desde el menú. Son ilustrativas: el fresco muestra la fruta de cas y la tortilla una
+preparación similar con queso. Las imágenes mantienen sus licencias originales.
+
 La licencia de distribución del proyecto está pendiente de definición por su propietario. No se incluye una licencia de código abierto en esta entrega. Las dependencias mantienen sus propias licencias.
-
-

@@ -5,6 +5,7 @@ from app.domain import BusinessError, Principal
 from app.models import Category, Product
 from app.schemas import CategoryInput, ProductInput
 from app.services.audit import record
+from app.services.media import check_image
 
 
 def product_view(product: Product) -> dict:
@@ -16,6 +17,11 @@ def product_view(product: Product) -> dict:
         "price_cents": product.price_cents,
         "available": product.available,
         "icon": product.icon,
+        "image_url": product.image_url,
+        "featured": product.featured,
+        "sort_order": product.sort_order,
+        "allergens": product.allergens,
+        "cabys": product.cabys,
     }
 
 
@@ -25,13 +31,17 @@ class CatalogService:
 
     def list(self, include_unavailable: bool = False) -> dict:
         with self.database.read() as session:
-            query = select(Product).order_by(Product.name)
+            query = select(Product).order_by(
+                Product.featured.desc(), Product.sort_order, Product.name
+            )
             if not include_unavailable:
                 query = query.where(Product.available.is_(True))
             return {
                 "categories": [
-                    {"id": c.id, "name": c.name}
-                    for c in session.scalars(select(Category).order_by(Category.name))
+                    {"id": c.id, "name": c.name, "sort_order": c.sort_order}
+                    for c in session.scalars(
+                        select(Category).order_by(Category.sort_order, Category.name)
+                    )
                 ],
                 "products": [product_view(p) for p in session.scalars(query)],
             }
@@ -46,12 +56,14 @@ class CatalogService:
             if not category:
                 raise BusinessError("Categoría no encontrada.", 404)
             category.name = name
+            category.sort_order = data.sort_order
             session.add(category)
             session.flush()
             record(session, actor.id, "category.saved", category.id, name=name)
             return {"id": category.id, "name": category.name}
 
     def save_product(self, data: ProductInput, actor: Principal, product_id: int | None):
+        check_image(self.database, data.image_url)
         with self.database.write() as session:
             if not session.get(Category, data.category_id):
                 raise BusinessError("La categoría no existe.", 404)

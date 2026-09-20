@@ -29,11 +29,11 @@ async def daily_backup(database: Database):
         target = (
             database.path.parent
             / "backups"
-            / ("automatic-" + datetime.now(COSTA_RICA).strftime("%Y-%m-%d") + ".sqlite3")
+            / ("automatic-" + datetime.now(COSTA_RICA).strftime("%Y-%m-%d") + ".zip")
         )
         try:
             if not target.exists():
-                await run_in_threadpool(database.backup, target)
+                await run_in_threadpool(database.backup_bundle, target)
         except Exception:
             logger.exception("No se pudo crear el respaldo automático.")
         await asyncio.sleep(3600)

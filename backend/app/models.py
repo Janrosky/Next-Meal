@@ -28,6 +28,7 @@ class Category(Base):
     __tablename__ = "categories"
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(60), unique=True)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
 
 
 class Product(Base):
@@ -40,6 +41,11 @@ class Product(Base):
     price_cents: Mapped[int] = mapped_column(Integer)
     available: Mapped[bool] = mapped_column(Boolean, default=True)
     icon: Mapped[str] = mapped_column(String(8), default="🍽️")
+    image_url: Mapped[str] = mapped_column(String(100), default="")
+    featured: Mapped[bool] = mapped_column(Boolean, default=False)
+    sort_order: Mapped[int] = mapped_column(Integer, default=0)
+    allergens: Mapped[str] = mapped_column(String(300), default="")
+    cabys: Mapped[str] = mapped_column(String(13), default="")
 
 
 class Order(Base):
@@ -138,3 +144,44 @@ class BusinessSettings(Base):
     sinpe_phone: Mapped[str] = mapped_column(String(20))
     phone: Mapped[str] = mapped_column(String(20))
     address: Mapped[str] = mapped_column(String(200))
+    logo_url: Mapped[str] = mapped_column(String(100), default="")
+    cover_url: Mapped[str] = mapped_column(String(100), default="")
+    primary_color: Mapped[str] = mapped_column(String(7), default="#184c3b")
+    accent_color: Mapped[str] = mapped_column(String(7), default="#e99a53")
+    background_color: Mapped[str] = mapped_column(String(7), default="#f6f7f3")
+    surface_color: Mapped[str] = mapped_column(String(7), default="#ffffff")
+    text_color: Mapped[str] = mapped_column(String(7), default="#233b32")
+    hero_title: Mapped[str] = mapped_column(String(100), default="Tu antojo, recién hecho.")
+    receipt_footer: Mapped[str] = mapped_column(String(200), default="¡Gracias por tu visita!")
+    opening_hours: Mapped[str] = mapped_column(String(300), default="")
+    accepting_orders: Mapped[bool] = mapped_column(Boolean, default=True)
+    closed_message: Mapped[str] = mapped_column(
+        String(200), default="En este momento no recibimos pedidos."
+    )
+
+
+class FiscalProfile(Base):
+    __tablename__ = "fiscal_profiles"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    legal_name: Mapped[str] = mapped_column(String(160), default="")
+    identification: Mapped[str] = mapped_column(String(20), default="")
+    activity_code: Mapped[str] = mapped_column(String(10), default="")
+    email: Mapped[str] = mapped_column(String(160), default="")
+    branch_code: Mapped[str] = mapped_column(String(3), default="001")
+    terminal_code: Mapped[str] = mapped_column(String(5), default="00001")
+
+
+class CashMovement(Base):
+    __tablename__ = "cash_movements"
+    __table_args__ = (
+        CheckConstraint("kind IN ('deposit', 'withdrawal', 'expense')"),
+        CheckConstraint("amount_cents > 0"),
+    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    request_key: Mapped[str] = mapped_column(String(36), unique=True)
+    shift_id: Mapped[int] = mapped_column(ForeignKey("cash_shifts.id"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    kind: Mapped[str] = mapped_column(String(16))
+    amount_cents: Mapped[int] = mapped_column(Integer)
+    reason: Mapped[str] = mapped_column(String(200))
+    created_at: Mapped[int] = mapped_column(Integer)

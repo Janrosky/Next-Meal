@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from app.database import Database
 from app.domain import NEXT_STATUS, BusinessError, PaymentMethod, PreparationStatus, Principal
-from app.models import CashShift, Order, OrderItem, Payment, Product
+from app.models import BusinessSettings, CashShift, Order, OrderItem, Payment, Product
 from app.schemas import OrderInput, PaymentInput
 from app.services.audit import record
 
@@ -61,6 +61,9 @@ class OrderService:
                 if existing.request_fingerprint != signature:
                     raise BusinessError("Ese intento corresponde a otro pedido.", 409)
                 return order_view(existing)
+            settings = session.get(BusinessSettings, 1)
+            if settings and not settings.accepting_orders:
+                raise BusinessError(settings.closed_message, 409)
             product_ids = [line.product_id for line in data.items]
             if len(set(product_ids)) != len(product_ids):
                 raise BusinessError("Agrupá las cantidades de cada producto.")

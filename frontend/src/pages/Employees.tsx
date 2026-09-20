@@ -22,11 +22,10 @@ export default function Employees({ currentUser }: { currentUser: User }) {
       reset();
     }, 'Cuenta guardada.'); }}>
       <label>Usuario<input value={username} disabled={!!editing} required minLength={3} maxLength={40} pattern="[a-z0-9_.-]{3,40}" onChange={e => setUsername(e.target.value.toLowerCase())} autoComplete="off" /></label>
-      <label>{editing ? 'Nueva contraseña (opcional)' : 'Contraseña'}<input type="password" required={!editing} minLength={10} maxLength={128} value={password} onChange={e => setPassword(e.target.value)} autoComplete="new-password" /></label>
+      <label>{editing ? 'Nueva contraseña (opcional)' : 'Contraseña'}<input type="password" required={!editing} value={password} onChange={e => setPassword(e.target.value)} autoComplete="new-password" /></label>
       <label>Perfil<select value={role} onChange={e => setRole(e.target.value as Role)}>{(['cashier', 'kitchen', 'admin'] as Role[]).map(r => <option key={r} value={r}>{roleLabel[r]}</option>)}</select></label>
       {editing && <label className="check-label"><input type="checkbox" checked={active} onChange={e => setActive(e.target.checked)} /> Cuenta activa</label>}
       <button className="primary" disabled={action.busy}>Guardar cuenta</button>{editing && <button type="button" className="text-button" onClick={reset}>Cancelar edición</button>}
       <p className="small muted">Los cambios de perfil, contraseña o estado cierran las sesiones de esa cuenta.</p>
     </form></section></div></>;
 }
-

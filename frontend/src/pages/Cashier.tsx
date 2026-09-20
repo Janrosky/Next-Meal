@@ -5,6 +5,7 @@ import { ApiError, newKey, post } from '../lib/api';
 import { dateTime, methodLabel, money, parseMoney } from '../lib/format';
 import { useAction, useResource } from '../lib/hooks';
 import type { Business, Order, PaymentMethod, Shifts } from '../types';
+import PrintReceipt from '../components/PrintReceipt';
 
 function PaymentForm({ order, hasShift, sinpe }: { order: Order; hasShift: boolean; sinpe: string }) {
   const [method, setMethod] = useState<PaymentMethod>('cash');
@@ -57,6 +58,7 @@ function PaymentForm({ order, hasShift, sinpe }: { order: Order; hasShift: boole
           <label>Motivo<input minLength={3} maxLength={300} required value={reason} onChange={e => setReason(e.target.value)} /></label><button className="secondary" disabled={action.busy}>Confirmar cancelación</button></form>}
       </>}
     <Notice error={action.error} message={action.message} />
+    {(paid || order.payment_status === 'paid') && <PrintReceipt order={paid ?? order} />}
   </section>;
 }
 
@@ -79,4 +81,3 @@ export default function Cashier() {
       {selectedOrder ? <PaymentForm key={selectedOrder.id} order={selectedOrder} hasShift={!!shifts.data?.current} sinpe={business.data?.sinpe_phone ?? ''} /> : <section className="panel"><Empty>Seleccioná un pedido para cobrar.</Empty></section>}
     </div></>;
 }
-

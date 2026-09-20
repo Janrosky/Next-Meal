@@ -2,10 +2,14 @@ import type { ReactNode } from 'react';
 import { AlertCircle, ChefHat, LoaderCircle } from 'lucide-react';
 import type { Order } from '../types';
 import { money, statusLabel } from '../lib/format';
+import { useBusiness } from '../lib/theme';
 
-export function Brand({ name = 'SodaLocal', compact = false }: { name?: string; compact?: boolean }) {
-  return <div className="brand"><span className="brand-mark"><ChefHat size={25} /></span>
-    <div><strong>{name}</strong>{!compact && <small>BUENA COMIDA, BUEN ORDEN.</small>}</div></div>;
+export function Brand({ name, compact = false }: { name?: string; compact?: boolean }) {
+  const business = useBusiness();
+  return <div className="brand">{business.logo_url
+    ? <img className="brand-logo" src={business.logo_url} alt={'Logo de ' + business.name} />
+    : <span className="brand-mark"><ChefHat size={25} /></span>}
+    <div><strong>{name ?? business.name}</strong>{!compact && <small>{business.tagline}</small>}</div></div>;
 }
 export function Notice({ error, message }: { error?: string; message?: string }) {
   return <>{error && <div className="notice error" role="alert"><AlertCircle size={18} />{error}</div>}
@@ -26,4 +30,3 @@ export function OrderLines({ order, prices = true }: { order: Order; prices?: bo
       {order.table_number && ' · Mesa ' + order.table_number}</div>
     {order.notes && <div className="kitchen-note"><strong>Nota:</strong> {order.notes}</div>}</>;
 }
-

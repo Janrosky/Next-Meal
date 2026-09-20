@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard';
 import CatalogAdmin from './pages/CatalogAdmin';
 import Employees from './pages/Employees';
 import Settings from './pages/Settings';
+import { BusinessProvider } from './lib/theme';
 import History from './pages/History';
 
 function Workspace({ user, logout }: { user: User; logout: () => Promise<void> }) {
@@ -70,6 +71,5 @@ export default function App() {
     window.addEventListener('hashchange', changed);
     return () => window.removeEventListener('hashchange', changed);
   }, []);
-  return staff ? <Staff /> : <Kiosk />;
+  return <BusinessProvider>{staff ? <Staff /> : <Kiosk />}</BusinessProvider>;
 }
-

@@ -1,0 +1,67 @@
+/* Semantic colors shared by every view; editable without external assets. */
+.themed-app{min-height:100vh;color:var(--text);background:var(--page-bg)}
+.themed-app :is(.kiosk,.login-page,.workspace,.workspace-content){background:var(--page-bg);color:var(--text)}
+.themed-app :is(.panel,.sidebar,.workspace-header,.cart-panel,.product-card,.kitchen-ticket,.order-summary,.search,input,textarea,select,.secondary,.ticket-number){background:var(--surface);color:var(--text);border-color:var(--border)}
+.themed-app :is(.eyebrow,.muted,.empty,.brand small,.sidebar-label,.sidebar nav button,.menu-link,.logout,.back-link,.header-right>a,.menu-footer,.cart-footnote,.cart-panel>.muted,.notes-label,.page-heading p:not(.eyebrow),.order-summary small,.order-summary p,.order-context,.login-story>small,.login-story>div>p:not(.eyebrow),.totals dt,.employee-row small,.product-cell small,.history-order summary>span:nth-child(2),th,.section-title svg){color:var(--muted)}
+.themed-app :is(input::placeholder,textarea::placeholder){color:var(--muted)}
+.themed-app :is(.primary,.categories button.selected,.brand-mark){background:var(--green);color:var(--on-primary);border-color:var(--green)}
+.themed-app .primary:hover:not(:disabled){background:var(--green-dark)}
+.themed-app :is(.secondary,.icon-button,.category-list button){color:var(--text)}
+.themed-app :is(.icon-button,.categories button,.segmented,.login-icon,.local-pill,.quantity,.rank,.count,.age,.kitchen-column,.receipt-check,.login-story,.menu-hero){background:var(--soft);color:var(--text)}
+.themed-app :is(.menu-hero .eyebrow,.menu-hero p:not(.eyebrow),.hero-steps,.menu-hero em,.login-story h1 em){color:var(--text)}
+.themed-app :is(.hero-stamp,.featured-label){background:var(--orange);color:var(--on-accent);border-color:var(--orange)}
+.themed-app .hero-plate{background:var(--surface);border-color:var(--surface)}
+.themed-app :is(.sidebar nav button.active,.sidebar nav button:hover,.order-summary.selected,.segmented button.selected,.secondary:hover:not(:disabled),.payment-methods button.selected){background:var(--soft);color:var(--text);border-color:var(--green)}
+.themed-app .sidebar nav button.active svg{color:var(--text)}
+.themed-app :is(.product-bottom>strong,.cart-total strong,.change-box strong){color:var(--text)}
+.themed-app :is(.product-copy>p,.cart-item small,.top-product small,.metric .row-between){color:var(--muted)}
+.themed-app :is(.metric,.payment-methods button,.stepper button){background:var(--surface);border-color:var(--border);color:var(--text)}
+.themed-app .metric:first-child{background:var(--green);color:var(--on-primary);border-color:var(--green)}
+.themed-app .metric:first-child .row-between,.themed-app .metric:first-child svg{color:var(--on-primary)}
+.themed-app .metric svg{color:var(--muted)}
+.themed-app .method-report progress::-webkit-progress-bar{background:var(--soft)}
+.themed-app .method-report progress::-webkit-progress-value{background:var(--orange)}
+.themed-app .method-report progress::-moz-progress-bar{background:var(--orange)}
+.themed-app :is(.product-art,.cart-icon,.product-cell>span,.avatar,.change-box){background:var(--cream);color:var(--text)}
+.themed-app .add-button{background:var(--green);color:var(--on-primary);border-color:var(--green)}
+.themed-app .add-button:hover:not(:disabled){background:var(--green-dark);color:var(--on-primary)}
+.themed-app :is(button,a,input,textarea,select):focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.themed-app input:focus,.themed-app textarea:focus,.themed-app select:focus{border-color:var(--green);box-shadow:0 0 0 3px var(--soft)}
+.themed-app .segmented button{color:var(--muted)}
+.themed-app :is(td,.top-product,.cart-item,.order-line,.category-list button,.employee-row,.history-order,.shift-history article){border-color:var(--border)}
+.brand-logo{width:48px;height:48px;object-fit:contain;flex-shrink:0;border-radius:10px}
+.brand{min-width:0}.brand>div{min-width:0}.brand strong{overflow-wrap:anywhere}.brand small{max-width:220px;line-height:1.5;letter-spacing:.5px}
+.product-art{position:relative;overflow:hidden}.product-art>img{width:100%;height:100%;object-fit:cover}
+.featured-label{position:absolute;top:10px;left:10px;border-radius:20px;font-size:10px;font-weight:700;padding:6px 10px}
+.product-thumb{width:48px;height:48px;object-fit:cover;border-radius:8px}
+.cart-icon{overflow:hidden}.cart-icon img{width:100%;height:100%;object-fit:cover}
+.hero-cover{width:42%;max-height:240px;object-fit:cover;border-radius:14px;align-self:stretch}
+.menu-hero h1{max-width:520px;overflow-wrap:anywhere}
+.allergen-info{font-size:11px;margin-bottom:15px;color:var(--muted)}.allergen-info summary{cursor:pointer}.allergen-info p{margin:8px 0;overflow-wrap:anywhere}
+.business-contact{text-align:center;font-size:12px;color:var(--muted);white-space:pre-line;margin:16px 0}.business-contact p{margin:4px}
+.settings-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(300px,1fr);gap:24px}
+.settings-form,.settings-side{display:flex;flex-direction:column;gap:22px;min-width:0}
+.settings-form .panel{width:100%}.settings-save{display:flex;flex-wrap:wrap;align-items:center;gap:14px;padding-bottom:25px}.settings-save .notice{width:100%}
+.image-picker{margin-bottom:16px;min-width:0}.image-picker>img{display:block;max-width:100%;width:180px;height:120px;object-fit:contain;border-radius:8px;border:1px solid var(--border);margin-bottom:12px}
+.image-picker input[type=file]{font-size:12px;padding:8px;min-width:0}.image-picker .text-button{padding-top:0}
+.palette-presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}.palette-presets .secondary{font-size:11px;padding:9px}
+.swatches{display:flex}.swatches i{width:13px;height:22px}.swatches i:first-child{border-radius:4px 0 0 4px}.swatches i:last-child{border-radius:0 4px 4px 0}
+.color-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}.color-control{display:flex;gap:8px;min-width:0}
+.color-control input[type=color]{width:48px;flex-shrink:0;padding:3px}.color-control input:not([type=color]){min-width:0;font-family:monospace}
+.theme-preview{padding:25px;border:1px solid var(--border);border-radius:14px;margin:4px 0 14px}
+.preview-brand{display:flex;gap:12px;align-items:center;font-size:22px;overflow-wrap:anywhere}.preview-brand img{height:45px;width:45px;object-fit:contain}
+.theme-preview>p{font-size:12px}.preview-card{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:20px}
+.preview-card>p{font-size:12px;color:var(--text)}.preview-card .primary{font-size:11px;padding:10px}.preview-price{display:inline-block;background:var(--orange);color:var(--on-accent);padding:9px;border-radius:8px;margin-right:12px}
+.backup-list{margin-top:20px}.backup-list>div{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);font-size:11px}.backup-list small{display:block;color:var(--muted);font-size:10px}
+.settings-side summary{cursor:pointer;margin-bottom:16px;font-size:15px}
+.cash-movements{margin-top:24px;max-width:720px}.movement-list article{border-top:1px solid var(--border);padding:16px 0;font-size:12px}.movement-list p{margin:8px 0}.movement-list small{color:var(--muted)}
+.receipt-actions{margin-bottom:18px}
+.print-receipt{display:none}
+@media(max-width:1100px){.settings-layout{grid-template-columns:1fr}.settings-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}.hero-cover{width:36%}}
+@media(max-width:700px){.settings-side{display:flex}.color-grid{grid-template-columns:1fr}.hero-cover{display:none}.brand small{max-width:180px}.brand-logo{width:38px;height:38px}.preview-brand{font-size:19px}.theme-preview{padding:16px}.preview-card .primary{margin-top:10px}}
+@media print{
+  body>*{display:none!important}body>.print-receipt{display:block!important}
+  .print-receipt{width:72mm;max-width:100%;margin:0 auto;padding:4mm 0;font:12px Arial,sans-serif;color:#000;background:#fff;overflow-wrap:anywhere}
+  .print-receipt h2{font-size:18px;letter-spacing:0}.print-receipt h3{font-size:15px}.print-receipt p{margin:8px 0;line-height:1.5}.print-receipt small{font-size:10px}
+  .receipt-line{display:flex;justify-content:space-between;gap:10px;margin:8px 0}.receipt-line strong{white-space:nowrap}
+}

@@ -1,11 +1,15 @@
 import sqlite3
+import tempfile
+import zipfile
 from collections.abc import Iterator
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
+from datetime import UTC, datetime
 from pathlib import Path
 
 from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 
+from app.migrations import VERSION, upgrade_v2
 from app.models import Base
 
 
@@ -33,11 +37,22 @@ class Database:
         with self.engine.connect() as connection:
             connection.exec_driver_sql("PRAGMA journal_mode=WAL")
             version = connection.exec_driver_sql("PRAGMA user_version").scalar_one()
-            if version not in (0, 1):
+            if version not in (0, 1, VERSION):
                 raise RuntimeError("Versión de base de datos no compatible.")
-        Base.metadata.create_all(self.engine)
-        with self.engine.begin() as connection:
-            connection.exec_driver_sql("PRAGMA user_version=1")
+        if version == 1:
+            stamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S-%f")
+            self.backup(self.path.parent / "backups" / f"pre-upgrade-v1-{stamp}.sqlite3")
+        with self.engine.connect() as connection:
+            connection.exec_driver_sql("BEGIN IMMEDIATE")
+            try:
+                if version == 1:
+                    upgrade_v2(connection)
+                Base.metadata.create_all(connection)
+                connection.exec_driver_sql(f"PRAGMA user_version={VERSION}")
+                connection.commit()
+            except Exception:
+                connection.rollback()
+                raise
 
     @contextmanager
     def read(self) -> Iterator[Session]:
@@ -60,8 +75,35 @@ class Database:
         if target == self.path:
             raise ValueError("El respaldo debe usar otro archivo.")
         target.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.path) as source, sqlite3.connect(target) as destination:
+        with (
+            closing(sqlite3.connect(self.path)) as source,
+            closing(sqlite3.connect(target)) as destination,
+        ):
             source.backup(destination)
 
     def close(self):
         self.engine.dispose()
+
+    def backup_bundle(self, target: Path):
+        """Snapshot the database before copying immutable local image files."""
+        target.parent.mkdir(parents=True, exist_ok=True)
+        partial = target.with_suffix(".partial")
+        try:
+            with tempfile.TemporaryDirectory() as folder:
+                snapshot = Path(folder) / "soda.sqlite3"
+                self.backup(snapshot)
+                with zipfile.ZipFile(partial, "w", zipfile.ZIP_DEFLATED) as archive:
+                    archive.write(snapshot, "soda.sqlite3")
+                    media = self.path.parent / "media"
+                    if media.is_dir():
+                        for file in media.glob("*.webp"):
+                            archive.write(file, "media/" + file.name)
+                    archive.writestr(
+                        "RESTORE.txt",
+                        "Detener el servidor. Extraer en una carpeta nueva. "
+                        "Apuntar SODA_DATABASE a soda.sqlite3. Conservar media junto a la base. "
+                        "Reiniciar con una versión compatible y verificar los datos.",
+                    )
+            partial.replace(target)
+        finally:
+            partial.unlink(missing_ok=True)

@@ -5,6 +5,7 @@ import { ApiError, newKey, post } from '../lib/api';
 import { money } from '../lib/format';
 import { useAction, useResource } from '../lib/hooks';
 import type { Business, Catalog, Order, OrderDraft } from '../types';
+import PrintReceipt from '../components/PrintReceipt';
 
 const PENDING_KEY = 'sodalocal.pending-order';
 function readPending(): OrderDraft | null {
@@ -76,33 +77,38 @@ export default function Kiosk() {
       <p>Mostrá este número. Comenzaremos a preparar tu comida al confirmar el pago.</p>
       <div className="ticket-number"><small>TU PEDIDO</small><strong>#{receipt.number}</strong><span>{money(receipt.total_cents)}</span></div>
       <p>Efectivo · Tarjeta · SINPE Móvil</p>
+      <div className="receipt-actions"><PrintReceipt order={receipt} /></div>
       <button className="primary" onClick={() => setReceipt(null)}>Hacer otro pedido <ArrowRight size={18} /></button>
     </main> : <div className="kiosk-layout"><main className="menu-main">
-      <section className="menu-hero"><div><p className="eyebrow">FRESQUITO. RICO. A TU GUSTO.</p>
-        <h1>Tu antojo,<br /><em>recién hecho.</em></h1>
+      <section className="menu-hero"><div><p className="eyebrow">CREA TU ORDEN</p>
+        <h1>{business.data?.hero_title || 'Tu antojo, recién hecho.'}</h1>
         <p>{business.data?.tagline || 'Hecho aquí. Servido con cariño.'}</p>
         <span className="hero-steps">01 Elegí &nbsp; → &nbsp; 02 Ordená &nbsp; → &nbsp; 03 Pagá en caja</span></div>
-        <div className="hero-plate" aria-hidden="true"><span>🍛</span><div className="hero-stamp">SABOR<br />DE CASA</div></div>
+        {business.data?.cover_url ? <img className="hero-cover" src={business.data.cover_url} alt={'Menú de ' + business.data.name} /> : <div className="hero-plate" aria-hidden="true"><span>🍛</span><div className="hero-stamp">SABOR<br />DE CASA</div></div>}
       </section>
       <div className="menu-toolbar"><h2>¿Qué se te antoja?</h2><label className="search"><Search size={18} /><input aria-label="Buscar en el menú" placeholder="Buscá tu favorito…" value={search} onChange={e => setSearch(e.target.value)} /></label></div>
       <nav className="categories" aria-label="Categorías"><button className={category === 0 ? 'selected' : ''} onClick={() => setCategory(0)}>Todo el menú</button>
         {catalog.data?.categories.map(c => <button key={c.id} className={category === c.id ? 'selected' : ''} onClick={() => setCategory(c.id)}>{c.name}</button>)}</nav>
       <Notice error={catalog.error || business.error} />
+      {business.data && !business.data.accepting_orders && <p className="notice" role="status">{business.data.closed_message}</p>}
       {!catalog.data ? <Loading /> : visible.length === 0 ? <Empty>No hay productos para mostrar.</Empty> :
         <div className="product-grid">{visible.map(p => <article className="product-card" key={p.id}>
-          <div className={'product-art art-' + (p.category_id % 4)} aria-hidden="true">{p.icon}</div>
+          <div className={'product-art art-' + (p.category_id % 4)}>{p.image_url ? <img src={p.image_url} alt={p.name} loading="lazy" /> : <span aria-hidden="true">{p.icon}</span>}{p.featured && <span className="featured-label">Favorito</span>}</div>
           <div className="product-copy"><h3>{p.name}</h3><p>{p.description}</p>
+            {p.allergens && <details className="allergen-info"><summary>Información alimentaria</summary><p>{p.allergens}</p></details>}
             <div className="product-bottom"><strong>{money(p.price_cents)}</strong>
               <button className="add-button" disabled={!!pending || action.busy || (cart[p.id] ?? 0) >= 50} aria-label={'Agregar ' + p.name} onClick={() => quantity(p.id, 1)}><Plus size={21} /></button></div></div>
         </article>)}</div>}
       <p className="menu-footer">Preparado al momento · Precios finales en colones</p>
+      <p className="menu-footer"><a href="/demo-photo-credits.html" target="_blank" rel="noreferrer">Fotografías ilustrativas · Créditos del menú de ejemplo</a></p>
+      {business.data && <div className="business-contact"><p>{business.data.opening_hours}</p><p>{business.data.address}</p><p>{business.data.phone}</p></div>}
     </main><aside className="cart-panel"><div className="cart-heading"><ShoppingBag size={23} /><h2>Tu pedido</h2><span className="count">{count}</span></div>
       <p className="muted">Un buen momento empieza con buena comida.</p>
       <div className="segmented"><button disabled={!!pending} className={mode === 'takeaway' ? 'selected' : ''} onClick={() => setMode('takeaway')}>Para llevar</button>
         <button disabled={!!pending} className={mode === 'dine_in' ? 'selected' : ''} onClick={() => setMode('dine_in')}>Comer aquí</button></div>
       {mode === 'dine_in' && <label>Mesa (opcional)<input maxLength={12} value={table} disabled={!!pending} onChange={e => setTable(e.target.value)} /></label>}
       <div className="cart-items">{items.length === 0 && !pending ? <Empty>Agregá algo rico del menú.</Empty> : items.map(p =>
-        <div className="cart-item" key={p.id}><span className="cart-icon">{p.icon}</span><div><strong>{p.name}</strong><small>{money(p.price_cents)}</small>
+        <div className="cart-item" key={p.id}><span className="cart-icon">{p.image_url ? <img src={p.image_url} alt="" /> : p.icon}</span><div><strong>{p.name}</strong><small>{money(p.price_cents)}</small>
           <div className="stepper"><button disabled={!!pending} aria-label={'Quitar uno de ' + p.name} onClick={() => quantity(p.id, -1)}><Minus size={14} /></button><span>{cart[p.id]}</span><button disabled={!!pending || cart[p.id] >= 50} aria-label={'Sumar uno de ' + p.name} onClick={() => quantity(p.id, 1)}><Plus size={14} /></button></div></div>
           <strong>{money(p.price_cents * cart[p.id])}</strong></div>)}</div>
       {missingProducts && <div className="notice error">Un producto dejó de estar disponible. Vaciá el carrito y elegí de nuevo.</div>}
@@ -111,10 +117,9 @@ export default function Kiosk() {
       <div className="cart-total"><span>Total</span><strong>{money(total)}</strong></div>
       <Notice error={action.error} />
       {pending && <p className="notice">Estamos confirmando tu pedido. Si se interrumpió la conexión, reintentá: conservaremos el mismo número.</p>}
-      <button className="primary wide" disabled={action.busy || (!pending && (!count || missingProducts || !!catalog.error))} onClick={() => void confirm()}>
+      <button className="primary wide" disabled={action.busy || (!pending && (!count || missingProducts || !!catalog.error || !business.data?.accepting_orders))} onClick={() => void confirm()}>
         {action.busy ? 'Confirmando…' : pending ? 'Reintentar confirmación' : 'Confirmar pedido'} <ArrowRight size={19} /></button>
       <p className="cart-footnote">Pagás en caja al confirmar.<br />Efectivo, tarjeta o SINPE Móvil.</p>
     </aside></div>}
   </div>;
 }
-

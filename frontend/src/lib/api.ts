@@ -79,3 +79,13 @@ export async function downloadSales(day: string) {
   URL.revokeObjectURL(url);
 }
 
+export async function downloadFile(path: string, filename: string) {
+  const response = await fetch('/api' + path, {
+    headers: { Authorization: 'Bearer ' + sessionToken() },
+  });
+  if (!response.ok) throw new Error('No se pudo descargar. Revisá tu sesión.');
+  const url = URL.createObjectURL(await response.blob());
+  const link = document.createElement('a');
+  link.href = url; link.download = filename; link.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 10000);
+}

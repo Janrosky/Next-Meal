@@ -10,7 +10,7 @@ from app.database import Database
 from app.domain import BusinessError, Role
 from app.models import User
 from app.schemas import UserInput
-from app.seed import initialize_business, seed_demo_catalog
+from app.seed import add_demo_photos, initialize_business, refresh_demo_catalog, seed_demo_catalog
 from app.services.business import COSTA_RICA
 from app.services.employees import EmployeeService
 
@@ -22,6 +22,10 @@ def main():
     init.add_argument("--demo", action="store_true", help="Agregar un menú de ejemplo")
     backup = subcommands.add_parser("backup", help="Respaldar SQLite de forma consistente")
     backup.add_argument("--output", type=Path)
+    subcommands.add_parser("demo-images", help="Agregar fotos a productos de ejemplo sin modificar")
+    subcommands.add_parser(
+        "demo-refresh", help="Reemplazar fotos y datos de productos demo por nombre y ampliar categorías"
+    )
     args = parser.parse_args()
     database = Database(Settings.from_environment().database_path)
     database.initialize()
@@ -32,7 +36,9 @@ def main():
                 users = session.scalar(select(func.count()).select_from(User))
             if not users:
                 username = input("Usuario administrador [admin]: ").strip() or "admin"
-                password = getpass.getpass("Contraseña (mínimo 10 caracteres): ")
+                password = getpass.getpass("Contraseña: ")
+                if not password:
+                    raise BusinessError("Escribí una contraseña.")
                 if password != getpass.getpass("Repetir contraseña: "):
                     raise BusinessError("Las contraseñas no coinciden.")
                 EmployeeService(database).create(
@@ -44,6 +50,10 @@ def main():
             if args.demo:
                 seeded = seed_demo_catalog(database)
                 print("Menú de ejemplo creado." if seeded else "El catálogo ya contiene productos.")
+        elif args.command == "demo-images":
+            print(f"Fotografías agregadas: {add_demo_photos(database)}")
+        elif args.command == "demo-refresh":
+            print(f"Productos de ejemplo actualizados: {refresh_demo_catalog(database)}")
         else:
             target = args.output or database.path.parent / "backups" / (
                 "manual-" + datetime.now(COSTA_RICA).strftime("%Y%m%d-%H%M%S") + ".sqlite3"
