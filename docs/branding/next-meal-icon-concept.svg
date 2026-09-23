@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Concepto de ícono de Next-Meal</title>
+  <desc id="desc">Ticket rojo sobre fondo azul petróleo con una letra N amarilla formada por líneas de vapor.</desc>
+  <rect width="512" height="512" rx="112" fill="#123C45"/>
+  <path fill="#E53935" d="M152 116h208q24 0 24 24v50c-23 0-42 19-42 42s19 42 42 42v98q0 24-24 24H152q-24 0-24-24v-98c23 0 42-19 42-42s-19-42-42-42v-50q0-24 24-24Z"/>
+  <path fill="none" stroke="#FFC928" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" d="M190 326V218c0-27-14-37-6-64M190 218l132 108V218c0-27 14-37 6-64"/>
+</svg>

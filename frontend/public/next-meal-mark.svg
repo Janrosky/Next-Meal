@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="next-meal-mark-title">
+  <title id="next-meal-mark-title">Next-Meal</title>
+  <rect width="64" height="64" rx="18" fill="#184c3b"/>
+  <path d="M17 31h30c0 11-6.8 17-15 17s-15-6-15-17Z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M26 25c0-5 3-8 7-10M35 26c0-4 2-7 6-9" fill="none" stroke="#e99a53" stroke-width="3.5" stroke-linecap="round"/>
+</svg>

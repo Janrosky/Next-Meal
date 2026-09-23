@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Ícono de Next-Meal: campana de servicio con check</title>
+  <desc id="desc">Campana coral con un check amarillo sobre un fondo carbón azulado.</desc>
+  <rect width="512" height="512" rx="116" fill="#17252A"/>
+  <rect x="216" y="105" width="80" height="54" rx="27" fill="#FFC857"/>
+  <path d="M118 326c7-101 62-166 138-166s131 65 138 166H118Z" fill="#FF704D"/>
+  <rect x="100" y="315" width="312" height="43" rx="21.5" fill="#FF704D"/>
+  <path d="m188 296 51 51 91-102" fill="none" stroke="#FFC857" stroke-width="43" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

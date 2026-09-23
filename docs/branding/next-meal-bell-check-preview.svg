@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Propuesta de ícono de Next-Meal con campana y check</title>
+  <desc id="desc">Presentación del ícono ampliado, tamaños pequeños, wordmark y paleta.</desc>
+  <defs>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#17252A" flood-opacity=".22"/>
+    </filter>
+    <g id="icon">
+      <rect width="512" height="512" rx="116" fill="#17252A"/>
+      <rect x="216" y="105" width="80" height="54" rx="27" fill="#FFC857"/>
+      <path d="M118 326c7-101 62-166 138-166s131 65 138 166H118Z" fill="#FF704D"/>
+      <rect x="100" y="315" width="312" height="43" rx="21.5" fill="#FF704D"/>
+      <path d="m188 296 51 51 91-102" fill="none" stroke="#FFC857" stroke-width="43" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </defs>
+
+  <rect width="1200" height="720" fill="#F6F8F3"/>
+  <text x="70" y="75" fill="#FF704D" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="3">NEXT-MEAL · CONCEPTO 02</text>
+  <text x="70" y="135" fill="#17252A" font-family="Manrope, Arial, sans-serif" font-size="48" font-weight="800">Campana + check</text>
+  <text x="70" y="178" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="20">Servicio listo, pedido correcto.</text>
+
+  <g transform="translate(70 230) scale(.78)" filter="url(#shadow)"><use href="#icon"/></g>
+
+  <g transform="translate(540 225)">
+    <text x="0" y="0" fill="#17252A" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800">Idea central</text>
+    <circle cx="12" cy="54" r="5" fill="#FF704D"/>
+    <text x="32" y="61" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="18">Campana: comida y servicio.</text>
+    <circle cx="12" cy="98" r="5" fill="#FFC857"/>
+    <text x="32" y="105" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="18">Check: pedido preparado.</text>
+    <circle cx="12" cy="142" r="5" fill="#17252A"/>
+    <text x="32" y="149" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="18">Forma simple para favicon.</text>
+
+    <text x="0" y="227" fill="#17252A" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800">Prueba de tamaño</text>
+    <g transform="translate(0 255) scale(.16)"><use href="#icon"/></g>
+    <g transform="translate(106 276) scale(.10)"><use href="#icon"/></g>
+    <g transform="translate(177 286) scale(.0625)"><use href="#icon"/></g>
+    <text x="0" y="365" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="14">82 px</text>
+    <text x="106" y="365" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="14">51 px</text>
+    <text x="177" y="365" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="14">32 px</text>
+
+    <g transform="translate(0 420)">
+      <g transform="scale(.105)"><use href="#icon"/></g>
+      <text x="70" y="39" fill="#17252A" font-family="Manrope, Arial, sans-serif" font-size="38" font-weight="800">Next</text>
+      <text x="160" y="39" fill="#FF704D" font-family="Manrope, Arial, sans-serif" font-size="38" font-weight="800">Meal</text>
+    </g>
+  </g>
+
+  <g transform="translate(850 225)">
+    <text x="0" y="0" fill="#17252A" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800">Paleta</text>
+    <rect y="35" width="280" height="72" rx="16" fill="#FF704D"/>
+    <text x="20" y="79" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Coral · #FF704D</text>
+    <rect y="123" width="280" height="72" rx="16" fill="#FFC857"/>
+    <text x="20" y="167" fill="#17252A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Amarillo · #FFC857</text>
+    <rect y="211" width="280" height="72" rx="16" fill="#F6F8F3" stroke="#DCE4DC"/>
+    <text x="20" y="255" fill="#17252A" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Claro · #F6F8F3</text>
+    <rect y="299" width="280" height="72" rx="16" fill="#17252A"/>
+    <text x="20" y="343" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Carbón · #17252A</text>
+  </g>
+</svg>

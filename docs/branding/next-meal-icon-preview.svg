@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Presentación del concepto de ícono de Next-Meal</title>
+  <desc id="desc">Vista principal del ícono, aplicaciones pequeñas y paleta cromática propuesta.</desc>
+  <defs>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#091F24" flood-opacity=".25"/>
+    </filter>
+    <g id="icon">
+      <rect width="512" height="512" rx="112" fill="#123C45"/>
+      <path fill="#E53935" d="M152 116h208q24 0 24 24v50c-23 0-42 19-42 42s19 42 42 42v98q0 24-24 24H152q-24 0-24-24v-98c23 0 42-19 42-42s-19-42-42-42v-50q0-24 24-24Z"/>
+      <path fill="none" stroke="#FFC928" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" d="M190 326V218c0-27-14-37-6-64M190 218l132 108V218c0-27 14-37 6-64"/>
+    </g>
+  </defs>
+
+  <rect width="1200" height="720" fill="#FFF8E8"/>
+  <text x="70" y="75" fill="#123C45" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="3">NEXT-MEAL · CONCEPTO 01</text>
+  <text x="70" y="135" fill="#202629" font-family="Manrope, Arial, sans-serif" font-size="48" font-weight="800">Ticket + vapor</text>
+  <text x="70" y="178" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="20">Un ícono directo para pedidos, cocina y operación.</text>
+
+  <g transform="translate(70 230) scale(.78)" filter="url(#shadow)"><use href="#icon"/></g>
+
+  <text x="540" y="262" fill="#202629" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800">Lectura del símbolo</text>
+  <circle cx="552" cy="310" r="5" fill="#E53935"/>
+  <text x="572" y="318" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="18">El ticket representa el pedido.</text>
+  <circle cx="552" cy="354" r="5" fill="#FFC928"/>
+  <text x="572" y="362" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="18">La “N” amarilla funciona como vapor.</text>
+  <circle cx="552" cy="398" r="5" fill="#123C45"/>
+  <text x="572" y="406" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="18">El petróleo equilibra el rojo y amarillo.</text>
+
+  <text x="540" y="480" fill="#202629" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800">Prueba de tamaño</text>
+  <g transform="translate(540 510) scale(.16)"><use href="#icon"/></g>
+  <g transform="translate(645 530) scale(.10)"><use href="#icon"/></g>
+  <g transform="translate(715 540) scale(.0625)"><use href="#icon"/></g>
+  <text x="540" y="620" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="14">82 px</text>
+  <text x="645" y="620" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="14">51 px</text>
+  <text x="715" y="620" fill="#526267" font-family="Inter, Arial, sans-serif" font-size="14">32 px</text>
+
+  <g transform="translate(900 250)">
+    <text x="0" y="12" fill="#202629" font-family="Manrope, Arial, sans-serif" font-size="26" font-weight="800">Paleta</text>
+    <rect y="52" width="235" height="66" rx="14" fill="#E53935"/><text x="18" y="93" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Rojo · #E53935</text>
+    <rect y="132" width="235" height="66" rx="14" fill="#FFC928"/><text x="18" y="173" fill="#202629" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Amarillo · #FFC928</text>
+    <rect y="212" width="235" height="66" rx="14" fill="#123C45"/><text x="18" y="253" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Petróleo · #123C45</text>
+    <rect y="292" width="235" height="66" rx="14" fill="#202629"/><text x="18" y="333" fill="#FFFFFF" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700">Carbón · #202629</text>
+  </g>
+</svg>

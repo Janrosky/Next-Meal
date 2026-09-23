@@ -8,7 +8,7 @@ export function Brand({ name, compact = false }: { name?: string; compact?: bool
   const business = useBusiness();
   return <div className="brand">{business.logo_url
     ? <img className="brand-logo" src={business.logo_url} alt={'Logo de ' + business.name} />
-    : <span className="brand-mark"><ChefHat size={25} /></span>}
+    : <img className="brand-logo" src="/next-meal-mark.svg" alt="Next-Meal" />}
     <div><strong>{name ?? business.name}</strong>{!compact && <small>{business.tagline}</small>}</div></div>;
 }
 export function Notice({ error, message }: { error?: string; message?: string }) {

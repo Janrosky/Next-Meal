@@ -48,8 +48,20 @@ export function BusinessProvider({ children }: { children: ReactNode }) {
     document.title = business.name + ' · Pedidos';
     let icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
     if (!icon) { icon = document.createElement('link'); icon.rel = 'icon'; document.head.append(icon); }
-    if (business.logo_url) icon.href = business.logo_url;
-    else icon.removeAttribute('href');
+    if (business.logo_url) {
+      icon.href = business.logo_url;
+      icon.removeAttribute('type');
+    } else {
+      icon.href = '/favicon.svg';
+      icon.type = 'image/svg+xml';
+    }
+    let themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+    if (!themeColor) {
+      themeColor = document.createElement('meta');
+      themeColor.name = 'theme-color';
+      document.head.append(themeColor);
+    }
+    themeColor.content = business.primary_color;
     document.documentElement.style.backgroundColor = business.background_color;
   }, [business]);
   return <BusinessContext.Provider value={business}><div className="themed-app" style={themeVariables(business)}>{children}</div></BusinessContext.Provider>;

@@ -1,0 +1,1 @@
+"""Next-Fix application package."""
